@@ -26,8 +26,7 @@ public class deneme extends javax.swing.JFrame {
     	initComponents();
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    @SuppressWarnings("unchecked")                     
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -590,7 +589,7 @@ public class deneme extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }                        
 
     private void weekdayDeleteAddWeekdayActionPerformed(java.awt.event.ActionEvent evt) {                                                        
         // TODO add your handling code here:
@@ -1165,17 +1164,14 @@ public class deneme extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(deneme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
+	    
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 safak1.setVisible(true);
             }
         });
     }
-
-    // Variables declaration - do not modify                     
+           
     private javax.swing.JTextField AF_aircraft;
     private javax.swing.JTextField AF_airlines;
     private javax.swing.JTextField AF_arrival;
@@ -1241,6 +1237,5 @@ public class deneme extends javax.swing.JFrame {
     private javax.swing.JButton updateFlight;
     private javax.swing.JLabel wd;
     private javax.swing.JTextField weekdayDeleteAddFlightNo;
-    private javax.swing.JTextField weekdayDeleteAddWeekday;
-    // End of variables declaration                   
+    private javax.swing.JTextField weekdayDeleteAddWeekday;                
 }
