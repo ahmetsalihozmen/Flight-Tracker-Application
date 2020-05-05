@@ -1,3 +1,5 @@
+package ai;
+
 public class ControlTower {
 	public String towerName;
 	
@@ -7,5 +9,8 @@ public class ControlTower {
 	
 	public boolean cancelFlight() {
 		return false;
+	}
+	public int delay(int a) {
+		return a;
 	}
 }
