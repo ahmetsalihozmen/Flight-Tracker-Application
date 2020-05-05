@@ -1,3 +1,5 @@
+package ai;
+
 public class Capital {
 	
 	private String country;
@@ -25,6 +27,9 @@ public class Capital {
 
 	public boolean signalFromControlTower() {
 		return controltw.cancelFlight();
+	}
+	public int delaySignal(int a) {
+		return controltw.delay(a);
 	}
 
 }
