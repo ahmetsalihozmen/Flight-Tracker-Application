@@ -1,4 +1,8 @@
+package ai;
+import java.util.Calendar;
+
 import java.util.ArrayList; 
+@SuppressWarnings("all")
 public class Flight {
 
 	private String arrivalTime; 
@@ -10,6 +14,11 @@ public class Flight {
 	private float timeTaken; // minutes
 	public Capital from, to;
 	private boolean isAvailable;
+	private int delay;
+	private float remains;
+	private boolean delayed;
+	
+	
 	public Flight(String arrivalTime,String airlines,String aircraftModel,String departure, 
 				  ArrayList<String> weekdays, String flightNO,float timetaken,Capital from,Capital to) {
 		this.arrivalTime = arrivalTime;
@@ -22,6 +31,9 @@ public class Flight {
 		this.from = from;
 		this.to = to;
 		this.isAvailable = true;
+		this.delay = 0;
+		this.remains = timetaken;
+		this.delayed = false;
 	}
 	
 	public Capital getFrom() {
@@ -48,6 +60,19 @@ public class Flight {
 	public String getAircraftModel() {
 		return aircraftModel;
 	}
+	public float getRemains() {
+		return remains;
+	}
+	public boolean getDelayed() {
+		return delayed;
+	}
+	public int getDelayTime() {
+		return delay;
+	}
+	public void setDelay(int a) {
+		this.delay = a;
+	}
+	
 	public String getWeekdays() {
 		String result = "";
 		for(String i: this.weekdays) {
@@ -59,7 +84,14 @@ public class Flight {
 	public void setAirlines(String a) {
 		this.airlines = a;
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
 	public void setTo(Capital to) {
 		this.to = to;
 	}
@@ -87,7 +119,6 @@ public class Flight {
 	public boolean getStatus() {
 		return this.isAvailable;
 	}
-	
 	public void cancel() {
 		if(from.getControltw().cancelFlight() == false) {
 			this.isAvailable = false;
@@ -99,7 +130,6 @@ public class Flight {
 			System.out.println("The control tower has not canceled the flight.");
 		}
 	}
-	
 	public void addWeekday(String newDay) {
 		this.weekdays.add(newDay);
 	}
@@ -107,4 +137,44 @@ public class Flight {
 		this.weekdays.remove(deleteDay);
 	}
 	
+	
+	//CALENDAR CONVERTIONS
+	
+	
+	public Calendar departureToCalendar() {
+		
+		Calendar dep = Calendar.getInstance();
+		String dr[] = this.departure.split(":");
+		dep.set(Calendar.HOUR, Integer.parseInt(dr[0]));
+		
+		dep.set(Calendar.MINUTE, Integer.parseInt(dr[1]));
+		
+		
+		return dep;	
+	}
+	
+	public Calendar arrivalToCalendar() {
+		
+		Calendar arr = Calendar.getInstance();
+		String ar[] = this.arrivalTime.split(":");
+		arr.set(Calendar.HOUR, Integer.parseInt(ar[0]));
+		
+		
+		arr.set(Calendar.MINUTE, Integer.parseInt(ar[1]));
+		
+		return arr;	
+	}
+	
+	public void delay(int a) {
+		this.delay = this.to.delaySignal(a);
+		
+		Calendar dep = departureToCalendar();
+		Calendar arr = arrivalToCalendar();
+		dep.add(Calendar.MINUTE,this.delay);
+		arr.add(Calendar.MINUTE,this.delay);
+		
+		this.arrivalTime = String.valueOf(arr.get(Calendar.HOUR_OF_DAY)) +":"+  String.valueOf(arr.get(Calendar.MINUTE));
+		this.departure = String.valueOf(dep.get(Calendar.HOUR_OF_DAY)) +":"+String.valueOf(dep.get(Calendar.MINUTE)) ;
+		this.delayed = true;
+	}
 }
