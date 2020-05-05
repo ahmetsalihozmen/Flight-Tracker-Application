@@ -1,32 +1,36 @@
-import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList; 
-
-import java.util.HashSet;
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+package ai;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 
+
+import javax.swing.table.DefaultTableModel;
+@SuppressWarnings("all")
 public class deneme extends javax.swing.JFrame {
     
 
     public ArrayList<Flight> flights;
-	public ArrayList<Capital> capitals;
-	public ArrayList<ControlTower> ctws;
+    public ArrayList<Capital> capitals;
+    public ArrayList<ControlTower> ctws;
+    public Thread time;
+    public Calendar time_is_now = Calendar.getInstance();
+    public int start_control;
+    public int resume_control;
 
     public deneme(ArrayList<Flight> flights, ArrayList<Capital> capitals, ArrayList<ControlTower> ctws) {
     	this.flights = new ArrayList<Flight>();
     	this.capitals = new ArrayList<Capital>();
     	this.ctws = new ArrayList<ControlTower>();
         setResizable(false);
+        this.time_is_now.set(2020,01,15,00,00);
+        this.start_control = 0;
+        this.resume_control = 0;
     	initComponents();
     }
 
-    @SuppressWarnings("unchecked")                     
+    @SuppressWarnings({ "serial" })                       
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -90,10 +94,9 @@ public class deneme extends javax.swing.JFrame {
         hour = new javax.swing.JLabel();
         dmy = new javax.swing.JLabel();
         wd = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        setSystem = new javax.swing.JButton();
+        setHour = new javax.swing.JTextField();
+        setdmy = new javax.swing.JTextField();
+        set = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -277,13 +280,18 @@ public class deneme extends javax.swing.JFrame {
             }
         });
 
-        hour.setText("jLabel23");
+        hour.setText("HH:MM");
 
-        dmy.setText("jLabel24");
+        dmy.setText("D/M/Y");
 
-        wd.setText("jLabel25");
+        wd.setText("DAY");
 
-        setSystem.setText("Set");
+        set.setText("Set");
+        set.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Crash the Flight Into Island ");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -429,10 +437,9 @@ public class deneme extends javax.swing.JFrame {
                                     .addComponent(hour))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(setSystem, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(set, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                    .addComponent(setHour, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(setdmy, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(56, 56, 56))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(systemTime)
@@ -501,14 +508,11 @@ public class deneme extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(deleteFlight)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jButton1)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(183, 183, 183)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(wd)))
+                                .addGap(189, 189, 189)
+                                .addComponent(wd))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -534,12 +538,12 @@ public class deneme extends javax.swing.JFrame {
                                                 .addComponent(systemTime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(setHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(hour))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                     .addComponent(dmy)
-                                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(setdmy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(32, 32, 32))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(19, 19, 19)
@@ -553,7 +557,7 @@ public class deneme extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cancelButton)
                             .addComponent(delayButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(setSystem))
+                            .addComponent(set))
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -589,7 +593,7 @@ public class deneme extends javax.swing.JFrame {
         );
 
         pack();
-    }                        
+    }// </editor-fold>                        
 
     private void weekdayDeleteAddWeekdayActionPerformed(java.awt.event.ActionEvent evt) {                                                        
         // TODO add your handling code here:
@@ -627,7 +631,7 @@ public class deneme extends javax.swing.JFrame {
         			(Object)this.flights.get(i).getTimeTaken(),
         			(Object)this.flights.get(i).getAircraftModel(),(Object)this.flights.get(i).getWeekdays(),
         			(Object)this.flights.get(i).getFrom().getCapitalName(),this.flights.get(i).getTo().getCapitalName(),
-        			(Object)"xd",(Object)status};
+        			(Object)this.flights.get(i).getRemains(),(Object)status};
         	DefaultTableModel model = (DefaultTableModel) tableShowsFlights.getModel();
             model.addRow(row);
         }
@@ -988,27 +992,105 @@ public class deneme extends javax.swing.JFrame {
     }                                             
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
+        String fo = controlFlightNo.getText();
+        int i = 0;
+        while( i<this.flights.size() && !(this.flights.get(i).getFlightNO().equals(fo)) ) {
+        	i++;
+        }
+        if(i<this.flights.size()) {
+        	this.flights.get(i).cancel();
+        	controlFlightNo.setText("Cancelleds.");
+        	ctrlDelayTime.setText("");
+        }
+        else {
+        	controlFlightNo.setText("Not a valid Flight No!");
+        	ctrlDelayTime.setText("");
+        }
+        
     }                                            
 
     private void delayButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+        String dly = ctrlDelayTime.getText();
+        String fo = controlFlightNo.getText();
+        int dlyint = Integer.parseInt(dly);
+        int i = 0;
+        while( i<this.flights.size() && !(this.flights.get(i).getFlightNO().equals(fo)) ) {
+        	i++;
+        }
+        if(i<this.flights.size()) {
+        	this.flights.get(i).delay(dlyint);
+        	controlFlightNo.setText("Delay is done.");
+        	ctrlDelayTime.setText("");
+        }
+        else {
+        	controlFlightNo.setText("Not a valid Flight No!");
+        	ctrlDelayTime.setText("");
+        }
+        
+        
     }                                           
 
-    private void startActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        // TODO add your handling code here:
+    @SuppressWarnings("deprecation")
+	private void startActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        if(this.start_control==1){
+            this.time.stop();
+            this.start_control = 0;
+            this.time_is_now.set(2020,01,15,00,00);
+        }
+        this.start_control = 1;
+        this.time = new Thread(){
+            public void run(){
+                while(true){
+                    hour.setText(String.format("%02d",time_is_now.get(Calendar.HOUR_OF_DAY))+":"+String.format("%02d",time_is_now.get(Calendar.MINUTE)));
+                    dmy.setText(String.format("%02d",time_is_now.get(Calendar.DAY_OF_MONTH))+"/"+String.format("%02d",time_is_now.get(Calendar.MONTH))+
+                            "/"+String.format("%04d",time_is_now.get(Calendar.YEAR)));
+                    wd.setText(time_is_now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.UK));
+                    time_is_now.add(Calendar.MINUTE,1);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(deneme.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        };
+        this.time.start();
     }                                     
 
-    private void pauseActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        // TODO add your handling code here:
+    @SuppressWarnings("deprecation")
+	private void pauseActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        this.time.stop();
+        this.resume_control++;
+        
     }                                     
 
-    private void stopActionPerformed(java.awt.event.ActionEvent evt) {                                     
-        // TODO add your handling code here:
+    @SuppressWarnings("deprecation")
+	private void stopActionPerformed(java.awt.event.ActionEvent evt) {                                     
+        this.time.stop();
+        this.time_is_now.set(2020,01,15,00,00);
     }                                    
 
     private void resumeActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        // TODO add your handling code here:
+        if(this.resume_control % 2 == 1){
+            this.resume_control++;
+            this.time = new Thread(){
+                public void run(){
+                    while(true){
+                        hour.setText(String.format("%02d",time_is_now.get(Calendar.HOUR_OF_DAY))+":"+String.format("%02d",time_is_now.get(Calendar.MINUTE)));
+                        dmy.setText(String.format("%02d",time_is_now.get(Calendar.DAY_OF_MONTH))+"/"+String.format("%02d",time_is_now.get(Calendar.MONTH))+
+                                "/"+String.format("%04d",time_is_now.get(Calendar.YEAR)));
+                        wd.setText(time_is_now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.UK));
+                        time_is_now.add(Calendar.MINUTE,1);
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(deneme.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            };
+            this.time.start();
+        }
     }                                      
 
     private void AF_arrivalActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -1024,14 +1106,17 @@ public class deneme extends javax.swing.JFrame {
             if(i.getStatus()) {
         		status = "Available";
             }
-            else{
+            if(i.getDelayed() && i.getStatus()) {
+            	status = "Delayed "+String.valueOf(i.getDelayTime())+" min.";
+            }
+            if(i.getStatus() == false){
                 status = "Cancelled";
             }
             Object[] row = {(Object)i.getFlightNO(),(Object)i.getDeparture(),(Object)i.getArrivalTime(),
         			(Object)i.getTimeTaken(),
         			(Object)i.getAircraftModel(),(Object)i.getWeekdays(),
         			(Object)i.getFrom().getCapitalName(),i.getTo().getCapitalName(),
-        			(Object)"xd",(Object)status};
+        			(Object)i.getRemains(),(Object)status};
         	DefaultTableModel model = (DefaultTableModel) tableShowsFlights.getModel();
             model.addRow(row);
             
@@ -1059,6 +1144,20 @@ public class deneme extends javax.swing.JFrame {
         }
                                      
     }                                        
+
+    private void setActionPerformed(java.awt.event.ActionEvent evt) {                                    
+        String a = setHour.getText();
+        String[] result1 = a.split(":");
+        int hours = Integer.parseInt(result1[0]);
+        int minutes = Integer.parseInt(result1[1]);
+        String b = setdmy.getText();
+        String[] result2 = b.split("/");
+        int d = Integer.parseInt(result2[0]);
+        int m = Integer.parseInt(result2[1]);
+        int y = Integer.parseInt(result2[2]);
+        this.time_is_now.set(y,m,d,hours,minutes);
+        
+    }                                   
 
 
     public static void main(String args[]) {
@@ -1164,14 +1263,17 @@ public class deneme extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(deneme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-	    
+        //</editor-fold>
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 safak1.setVisible(true);
             }
         });
     }
-           
+
+    // Variables declaration - do not modify                     
     private javax.swing.JTextField AF_aircraft;
     private javax.swing.JTextField AF_airlines;
     private javax.swing.JTextField AF_arrival;
@@ -1223,12 +1325,11 @@ public class deneme extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JButton pause;
     private javax.swing.JButton resume;
-    private javax.swing.JButton setSystem;
+    private javax.swing.JButton set;
+    private javax.swing.JTextField setHour;
+    private javax.swing.JTextField setdmy;
     private javax.swing.JButton showInformation;
     private javax.swing.JButton start;
     private javax.swing.JButton stop;
@@ -1237,5 +1338,6 @@ public class deneme extends javax.swing.JFrame {
     private javax.swing.JButton updateFlight;
     private javax.swing.JLabel wd;
     private javax.swing.JTextField weekdayDeleteAddFlightNo;
-    private javax.swing.JTextField weekdayDeleteAddWeekday;                
+    private javax.swing.JTextField weekdayDeleteAddWeekday;
+    // End of variables declaration                   
 }
