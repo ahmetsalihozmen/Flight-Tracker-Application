@@ -1,5 +1,10 @@
 # Flight Tracker Application
 
+## What is?
+
+This is a semester project of Object Oriented Programming BLM2012. This project includes subjects such that GUI, Multithreading, File I/O. Related classes in the ../src file. System attributes is given below.
+
+## System Attributes
 - This program simulates theflights between the major capitals, such as New York, Sydney, Paris, Tokyo, Istanbul etc. around the world. 
 
 - System includes at least 10 routes between 5 major capitals from different continents. 
