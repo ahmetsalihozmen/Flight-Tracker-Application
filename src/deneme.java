@@ -1,4 +1,7 @@
 package ai;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -10,7 +13,6 @@ import javax.swing.table.DefaultTableModel;
 @SuppressWarnings("all")
 public class deneme extends javax.swing.JFrame {
     
-
     public ArrayList<Flight> flights;
     public ArrayList<Capital> capitals;
     public ArrayList<ControlTower> ctws;
@@ -28,6 +30,20 @@ public class deneme extends javax.swing.JFrame {
         this.start_control = 0;
         this.resume_control = 0;
     	initComponents();
+    }
+    public void write() {
+    	FileWriter writer=null; 
+	    try {
+	        writer = new FileWriter("flights.txt");
+	        for(int i=0; i<flights.size(); i++) {
+				writer.write(flights.get(i).getFlightNO()+","+flights.get(i).getAircraftModel()+
+						","+flights.get(i).getFrom().getCapitalName()+","+flights.get(i).getTo().getCapitalName()+
+						","+flights.get(i).getAirlines()+"\n");
+	        }
+	        writer.close();
+	    } catch (IOException ex) {
+	        Logger.getLogger(deneme.class.getName()).log(Level.SEVERE, null, ex);
+	    }
     }
 
     @SuppressWarnings({ "serial" })                       
@@ -108,7 +124,7 @@ public class deneme extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Flight No", "Departure", "Arrival", "Time Taken", "Aircraft Model", "Weekdays", "From", "To", "Remaining", "Status"
+                "Flight No", "Departure", "Arrival", "Airlines", "Aircraft Model", "Weekdays", "From", "To", "Remaining", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -628,7 +644,7 @@ public class deneme extends javax.swing.JFrame {
             }
         	
         	Object[] row = {(Object)this.flights.get(i).getFlightNO(),(Object)this.flights.get(i).getDeparture(),(Object)this.flights.get(i).getArrivalTime(),
-        			(Object)this.flights.get(i).getTimeTaken(),
+        			(Object)this.flights.get(i).getAirlines(),
         			(Object)this.flights.get(i).getAircraftModel(),(Object)this.flights.get(i).getWeekdays(),
         			(Object)this.flights.get(i).getFrom().getCapitalName(),this.flights.get(i).getTo().getCapitalName(),
         			(Object)this.flights.get(i).getRemains(),(Object)status};
@@ -682,6 +698,7 @@ public class deneme extends javax.swing.JFrame {
          	this.flights.get(i).addWeekday(b);
          	weekdayDeleteAddFlightNo.setText("");
          	weekdayDeleteAddWeekday.setText("Done!");
+         	write();
          }
     }                                          
 
@@ -788,6 +805,7 @@ public class deneme extends javax.swing.JFrame {
 	         AF_timetaken.setText("");
 	         AF_departure.setText("");
 	         AF_arrival.setText("");
+	         write();
         }
         else {
         	 AF_flight_no.setText("This Flight Already Exists!");
@@ -814,6 +832,7 @@ public class deneme extends javax.swing.JFrame {
         	ctrl++;
         	DF_flight_no.setText("Delete is done!");
         	DF_airlines.setText("");
+        	write();
         }
         if(ctrl == 0) {
         	DF_flight_no.setText("Flight does not exist!");
@@ -974,6 +993,7 @@ public class deneme extends javax.swing.JFrame {
 	         AF_timetaken.setText("");
 	         AF_departure.setText("");
 	         AF_arrival.setText("");
+	         write();
         }
         else {
         	 AF_flight_no.setText("This Flight Doest Not Exist!");
@@ -1041,11 +1061,21 @@ public class deneme extends javax.swing.JFrame {
         this.time = new Thread(){
             public void run(){
                 while(true){
+                	jButton2ActionPerformed(evt);
                     hour.setText(String.format("%02d",time_is_now.get(Calendar.HOUR_OF_DAY))+":"+String.format("%02d",time_is_now.get(Calendar.MINUTE)));
                     dmy.setText(String.format("%02d",time_is_now.get(Calendar.DAY_OF_MONTH))+"/"+String.format("%02d",time_is_now.get(Calendar.MONTH))+
                             "/"+String.format("%04d",time_is_now.get(Calendar.YEAR)));
                     wd.setText(time_is_now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.UK));
                     time_is_now.add(Calendar.MINUTE,1);
+                    for(int i=0;i<flights.size();i++) {
+                    	for(int j=0 ; j<flights.get(i).weekdays.size();j++) {
+                       	    if(flights.get(i).getDeparture().equals(String.format("%02d",time_is_now.get(Calendar.HOUR_OF_DAY))+":"+String.format("%02d",time_is_now.get(Calendar.MINUTE)))
+                       	    		&& time_is_now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.UK) == flights.get(i).weekdays.get(j)&&flights.get(i).isAvailable){
+                       	    	AddThread.ekle(flights.get(i));
+                       	    	
+                       	    }
+                   	     }
+                    } 
                     try {
                         sleep(1000);
                     } catch (InterruptedException ex) {
@@ -1081,6 +1111,14 @@ public class deneme extends javax.swing.JFrame {
                                 "/"+String.format("%04d",time_is_now.get(Calendar.YEAR)));
                         wd.setText(time_is_now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.UK));
                         time_is_now.add(Calendar.MINUTE,1);
+                        for(int i=0;i<flights.size();i++) {
+                        	for(int j=0 ; j<flights.get(i).weekdays.size();j++) {
+	                       	    if(flights.get(i).getDeparture().equals(String.format("%02d",time_is_now.get(Calendar.HOUR_OF_DAY))+":"+String.format("%02d",time_is_now.get(Calendar.MINUTE)))
+	                       	    		&& time_is_now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.UK) == flights.get(i).weekdays.get(j)&&flights.get(i).isAvailable){
+	                       	    	AddThread.ekle(flights.get(i));
+	                       	    }
+                       	     }
+                        } 
                         try {
                             sleep(1000);
                         } catch (InterruptedException ex) {
@@ -1113,7 +1151,7 @@ public class deneme extends javax.swing.JFrame {
                 status = "Cancelled";
             }
             Object[] row = {(Object)i.getFlightNO(),(Object)i.getDeparture(),(Object)i.getArrivalTime(),
-        			(Object)i.getTimeTaken(),
+        			(Object)i.getAirlines(),
         			(Object)i.getAircraftModel(),(Object)i.getWeekdays(),
         			(Object)i.getFrom().getCapitalName(),i.getTo().getCapitalName(),
         			(Object)i.getRemains(),(Object)status};
@@ -1160,7 +1198,7 @@ public class deneme extends javax.swing.JFrame {
     }                                   
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
     	ArrayList<Flight> flights = new ArrayList<Flight>();
     	ArrayList<Capital> capitals = new ArrayList<Capital>();
     	ArrayList<ControlTower> ctws = new ArrayList<ControlTower>();
@@ -1222,7 +1260,13 @@ public class deneme extends javax.swing.JFrame {
 		safak1.flights.add(new Flight("12:00","Coffee Airlines","CFE170-137S","10:00",weekdays2,"001848",120f,capitals.get(0),capitals.get(3)));
 		safak1.flights.add(new Flight("00:00","Marx Airlines","CCCP111-SSS","14:00",weekdays3,"001818",480f,capitals.get(2),capitals.get(3)));
 		safak1.flights.add(new Flight("22:00","King Gizzard Airlines","KGALW-FMB","02:00",weekdays4,"002017",1200f,capitals.get(1),capitals.get(4)));
-		safak1.flights.add(new Flight("23:00","Oceanic Airlines","4-8-15-16-23-42","03:00",weekdays5,"Oceanic815",12000f,capitals.get(4),capitals.get(6)));
+		safak1.flights.add(new Flight("23:00","Oceanic Airlines","4-8-15-16-23-42","03:00",weekdays5,"Oceanic815",1200f,capitals.get(4),capitals.get(6)));
+		safak1.flights.add(new Flight("20:00","Halo Airlines","EAST-GER-1949","19:00",weekdays1,"MOTHERGER",200f,capitals.get(0),capitals.get(1)));
+		safak1.flights.add(new Flight("04:00","YTU CE AIRLINES","YES","01:00",weekdays3,"BLM2012",500f,capitals.get(1),capitals.get(2)));
+		safak1.flights.add(new Flight("14:00","Safak/Ahmet Airlines","COM ENG STDS","09:00",weekdays2,"SBASO",200f,capitals.get(2),capitals.get(3)));
+		safak1.flights.add(new Flight("00:00","CONVnn Airlines","5x5KERNEL","16:00",weekdays4,"A55505",200f,capitals.get(4),capitals.get(5)));
+		safak1.flights.add(new Flight("13:00","Polynomial Airlines","POLYNML-A888","11:00",weekdays5,"45431402",450f,capitals.get(0),capitals.get(6)));
+		
 		safak1.flights.get(0).addWeekday(weekdays1.get(0));
 		safak1.flights.get(0).addWeekday(weekdays1.get(1));
 		safak1.flights.get(0).addWeekday(weekdays1.get(2));
@@ -1235,9 +1279,25 @@ public class deneme extends javax.swing.JFrame {
 		safak1.flights.get(3).addWeekday(weekdays4.get(0));
 		safak1.flights.get(3).addWeekday(weekdays4.get(1));
 		safak1.flights.get(3).addWeekday(weekdays4.get(2));
-		safak1.flights.get(4).addWeekday(weekdays4.get(0));
-		safak1.flights.get(4).addWeekday(weekdays4.get(1));
-		safak1.flights.get(4).addWeekday(weekdays4.get(2));
+		safak1.flights.get(4).addWeekday(weekdays5.get(0));
+		safak1.flights.get(4).addWeekday(weekdays5.get(1));
+		safak1.flights.get(4).addWeekday(weekdays5.get(2));
+		safak1.flights.get(5).addWeekday(weekdays1.get(0));
+		safak1.flights.get(5).addWeekday(weekdays1.get(1));
+		safak1.flights.get(5).addWeekday(weekdays1.get(2));
+		safak1.flights.get(6).addWeekday(weekdays3.get(0));
+		safak1.flights.get(6).addWeekday(weekdays3.get(1));
+		safak1.flights.get(6).addWeekday(weekdays3.get(2));
+		
+		safak1.flights.get(7).addWeekday(weekdays2.get(0));
+		safak1.flights.get(7).addWeekday(weekdays2.get(1));
+		safak1.flights.get(7).addWeekday(weekdays2.get(2));
+		safak1.flights.get(8).addWeekday(weekdays4.get(0));
+		safak1.flights.get(8).addWeekday(weekdays4.get(1));
+		safak1.flights.get(8).addWeekday(weekdays4.get(2));
+		safak1.flights.get(9).addWeekday(weekdays5.get(0));
+		safak1.flights.get(9).addWeekday(weekdays5.get(1));
+		safak1.flights.get(9).addWeekday(weekdays5.get(2));
 		
 		safak1.capitals.add(capitals.get(0));
 		safak1.capitals.add(capitals.get(1));
@@ -1246,6 +1306,21 @@ public class deneme extends javax.swing.JFrame {
 		safak1.capitals.add(capitals.get(4));
 		safak1.capitals.add(capitals.get(5));
 		safak1.capitals.add(capitals.get(6));
+		
+		FileWriter writer=null; 
+	    try {
+	        writer = new FileWriter("flights.txt");
+	        for(int i=0; i<safak1.flights.size(); i++) {
+				writer.write(safak1.flights.get(i).getFlightNO()+","+safak1.flights.get(i).getAircraftModel()+
+						","+safak1.flights.get(i).getFrom().getCapitalName()+","+safak1.flights.get(i).getTo().getCapitalName()+
+						","+safak1.flights.get(i).getAirlines()+"\n");
+	        }
+	        writer.close();
+	    } catch (IOException ex) {
+	        Logger.getLogger(deneme.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+		
+		
 	
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -1338,6 +1413,5 @@ public class deneme extends javax.swing.JFrame {
     private javax.swing.JButton updateFlight;
     private javax.swing.JLabel wd;
     private javax.swing.JTextField weekdayDeleteAddFlightNo;
-    private javax.swing.JTextField weekdayDeleteAddWeekday;
-    // End of variables declaration                   
+    private javax.swing.JTextField weekdayDeleteAddWeekday;                  
 }
