@@ -1,4 +1,4 @@
-package ai;
+
 public class AddThread extends Thread {
 	public static void ekle(Flight fly) {
 		new Thread(new Runnable() {
