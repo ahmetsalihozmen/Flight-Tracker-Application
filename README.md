@@ -25,4 +25,4 @@ This is a semester project of Object Oriented Programming BLM2012. This project 
 
 ## Panel
 
-![An image](img/1.png) <!-- .element height="50%" width="50%" -->
+![An image](img/1.png) <!-- .element height="20%" width="20%" -->
