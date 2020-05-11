@@ -1,5 +1,3 @@
-package ai;
-
 public class ControlTower {
 	public String towerName;
 	
