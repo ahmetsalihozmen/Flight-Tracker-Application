@@ -3,8 +3,7 @@ import java.util.Calendar;
 
 import java.util.ArrayList; 
 @SuppressWarnings("all")
-public class Flight {
-
+public class Flight{	
 	private String arrivalTime; 
 	private String airlines;
 	private String aircraftModel;
@@ -13,7 +12,7 @@ public class Flight {
 	private String flightNO;	
 	private float timeTaken; // minutes
 	public Capital from, to;
-	private boolean isAvailable;
+	public boolean isAvailable;
 	private int delay;
 	private float remains;
 	private boolean delayed;
@@ -71,6 +70,9 @@ public class Flight {
 	}
 	public void setDelay(int a) {
 		this.delay = a;
+	}
+	public void setRemains(float a) {
+		this.remains=a;
 	}
 	
 	public String getWeekdays() {
