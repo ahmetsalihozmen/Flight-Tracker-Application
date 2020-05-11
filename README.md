@@ -20,3 +20,7 @@ This is a semester project of Object Oriented Programming BLM2012. This project 
 - System have a system date, and one second in your system would represent one minute in the real life. User is able to start, pause, resume and stop the time of the system. The scheduled flights would be simulated regarding to the system time.
 
 - Each capital has a control tower to manage take offs and landings. For example, the tower manager would set some delay for a scheduled flight or she/he could cancel certain flights or even make the aircrafts, which are close to the related tower, wait in the air.
+
+- SYSTEM ALSO HAS "CRASH THE FLIGHT INTO ISLAND" OPTION!
+
+## Panel
