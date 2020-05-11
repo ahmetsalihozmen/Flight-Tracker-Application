@@ -25,4 +25,4 @@ This is a semester project of Object Oriented Programming BLM2012. This project 
 
 ## Panel
 
-<img src="/img/1.png" alt="drawing" width="1200"/>
+<img src="/img/1.png" alt="drawing" width="700"/>
