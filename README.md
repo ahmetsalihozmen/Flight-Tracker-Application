@@ -25,4 +25,4 @@ This is a semester project of Object Oriented Programming BLM2012. This project 
 
 ## Panel
 
-![test image size](img/1.png){:height="10%" width="10%"}
+<img src="/img/imageedit_10_7868515470.png" alt="drawing" width="300"/>
