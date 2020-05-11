@@ -24,3 +24,5 @@ This is a semester project of Object Oriented Programming BLM2012. This project 
 - SYSTEM ALSO HAS "CRASH THE FLIGHT INTO ISLAND" OPTION!
 
 ## Panel
+
+![An image](img/1.png) <!-- .element height="50%" width="50%" -->
